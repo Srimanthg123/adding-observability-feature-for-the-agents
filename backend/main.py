@@ -105,7 +105,16 @@ def setup_langfuse_callback(session_id: str, token_payload: dict) -> Tuple[dict,
     Returns:
         Tuple of (config dict, callback_handler) where config is ready for chain execution
     """
-   
+    # Extract user email from token payload
+    user_email = token_payload.get("email") or token_payload.get("sub")
+    
+    # Get Langfuse callback handler configuration
+    config = get_langfuse_manager(session_id, user_email)
+    
+    # Extract the callback handler from config
+    callback_handler = config.get("callbacks", [None])[0] if config.get("callbacks") else None
+    
+    return config, callback_handler
 
 
 ## Task 2:  Flush Langfuse traces. 
@@ -113,7 +122,11 @@ async def flush_langfuse_traces(callback_handler) -> None:
     """
     Flush Langfuse traces.
     """
-   
+    if callback_handler:
+        try:
+            callback_handler.flush()
+        except Exception as e:
+            print(f"Error flushing Langfuse traces: {e}")
 
 @app.get("/new-session")
 def new_session():

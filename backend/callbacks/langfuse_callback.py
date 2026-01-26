@@ -1,15 +1,27 @@
 """
 Langfuse Callback Handler Module
-
-This module provides a centralized Langfuse callback handler for tracing
-LangChain chain executions in the Langfuse dashboard.
 """
 import os
-from typing import Optional
 from langfuse.langchain import CallbackHandler
-from langfuse import Langfuse
 from dotenv import load_dotenv
 
 load_dotenv()
 
-## Task 2: Add Observability with Langfuse Callback Handler (Chat API)
+def get_langfuse_manager(
+    session_id: str,
+    user_email: str | None = None,
+):
+    """
+    Returns a LangChain callback configuration for Langfuse.
+    """
+    handler = CallbackHandler(
+        public_key=os.getenv("LANGFUSE_PUBLIC_KEY"),
+        secret_key=os.getenv("LANGFUSE_SECRET_KEY"),
+        host=os.getenv("LANGFUSE_HOST"),
+        session_id=session_id,
+        user_id=user_email,
+        trace_name="travel_planner_chat",
+        tags=["fastapi", "langchain", "observability"],
+    )
+
+    return {"callbacks": [handler]}
