@@ -1,16 +1,3 @@
-## Project Context
-
-In earlier practice, you built a full-stack LLM application with FastAPI and LangChain.  
-However, without observability, it's difficult to understand how your application behaves in production — you can't see traces, token usage, costs, or correlate requests by session and user.
-
-In this practice, you will add end-to-end observability to your LLM application using two approaches:
-- Using a lightweight `@observe` decorator (Langfuse) combined with **OpenTelemetry** spans
-- Using the **Langfuse Callback Handler** to automatically trace LangChain executions, tokens, and costs with session/user correlation
-
-By the end, your app will be fully observable: you'll see traces, spans, token usage, and be able to correlate requests by session and user.
-
----
-
 ## Problem Statement
 
 Implement observability in your existing FastAPI + LangChain application using two complementary approaches: the `@observe` decorator with OpenTelemetry spans for security operations, and the Langfuse Callback Handler for comprehensive chain tracing with session/user metadata.  
@@ -56,13 +43,4 @@ Attach the Langfuse Callback Handler in your chat API so all chain events (LLM c
 
 ---
 
-## Evaluation Criteria
-
-Ensure you evaluate your solution against the below criteria:
-
-1. **Decorator Usage**: Ensure the @observe decorator is correctly applied so observability hooks trigger during chain execution.
-2. **Span Logging**: Make sure OpenTelemetry spans are properly initialized and visible in the console logs during request processing.
-3. **Callback Setup**: Ensure the Langfuse Callback Handler is correctly configured and attached to all chain executions.
-4. **Trace Metadata**: Make sure traces include important metadata such as session_id, user_email, and trace_name for clear correlation across requests.
-5. **Trace Flushing**: Ensure traces are properly flushed so no telemetry data is lost during or after streamed responses.
 
